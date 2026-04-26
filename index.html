@@ -6,7 +6,6 @@
     <title>📋 Data Penjualan & Stok - Galeri Ar-Rijal Dar'el</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* ========== Sama seperti sebelumnya ========== */
         :root {
             --gold: #C5A35A;
             --dark: #2A1A1A;
@@ -15,122 +14,558 @@
             --black: #1E1E1E;
             --gray: #8B7D6B;
             --border: #3B2F2F;
+            --danger: #e74c3c;
+            --success: #2e7d32;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', 'Montserrat', 'Raleway', sans-serif;
             background: linear-gradient(160deg, #1a0f0f 0%, #2a1a1a 40%, #1e1410 100%);
-            color: var(--cream); min-height:100vh; padding:20px; display:flex; flex-direction:column; align-items:center;
+            color: var(--cream);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .main-container {
-            max-width:950px; width:100%; background:rgba(42,26,26,0.85); backdrop-filter:blur(15px);
-            border:1px solid var(--border); border-radius:24px; padding:30px 25px;
-            box-shadow:0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px var(--gold) inset;
-            position:relative; overflow:hidden;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(42, 26, 26, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 25px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--gold) inset;
+            position: relative;
+            overflow: hidden;
         }
-        .main-container::before, .main-container::after {
-            content:''; position:absolute; border-radius:50%; pointer-events:none;
+        .main-container::before,
+        .main-container::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
         }
-        .main-container::before { top:-40px; right:-40px; width:150px; height:150px; border:2px solid rgba(197,163,90,0.25); }
-        .main-container::after { bottom:-30px; left:-30px; width:120px; height:120px; border:1px solid rgba(197,163,90,0.2); }
-        .header { text-align:center; margin-bottom:25px; position:relative; z-index:1; }
-        .header .logo-text { font-size:2.2em; font-weight:700; color:var(--gold); letter-spacing:2px;
-            font-family:'Playfair Display','Yeseva One','Times New Roman',serif; text-transform:uppercase;
-            text-shadow:0 2px 8px rgba(197,163,90,0.4); }
-        .header .sub-logo { font-size:1em; color:var(--cream); letter-spacing:1px; margin-top:2px; font-style:italic; }
-        .header .divider { width:120px; height:3px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
-            margin:12px auto; border-radius:3px; }
-        .date-section { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; z-index:1; }
-        .date-section label { font-weight:600; color:var(--gold); font-size:1.05em; }
-        .date-section input[type="date"] { padding:10px 16px; border-radius:10px; border:1px solid var(--gold);
-            background:var(--dark); color:var(--cream); font-size:1em; font-family:inherit; outline:none; transition:0.3s; }
-        .date-section input[type="date"]:focus { box-shadow:0 0 0 3px rgba(197,163,90,0.3); }
-        .filter-tabs { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:25px; z-index:1; }
-        .filter-tab { padding:8px 18px; border-radius:20px; background:transparent; border:1px solid var(--border);
-            color:var(--cream); cursor:pointer; font-weight:600; font-family:inherit; transition:0.3s; font-size:0.9em; }
-        .filter-tab.active { background:var(--gold); color:var(--dark); border-color:var(--gold); }
-        .filter-tab:hover { border-color:var(--gold); background:rgba(197,163,90,0.15); }
-        .pencarian-container { background:rgba(30,20,20,0.7); border:1px solid var(--border); border-radius:16px;
-            padding:20px; margin-bottom:25px; display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; z-index:1; }
-        .pencarian-container .field { display:flex; flex-direction:column; gap:5px; }
-        .pencarian-container label { font-size:0.9em; font-weight:600; color:var(--gold); }
-        .pencarian-container input[type="text"], .pencarian-container input[type="number"] {
-            padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:var(--dark);
-            color:var(--cream); font-family:inherit; font-size:1em; outline:none; transition:0.3s; }
-        .pencarian-container input[type="text"]:focus, .pencarian-container input[type="number"]:focus {
-            border-color:var(--gold); box-shadow:0 0 0 3px rgba(197,163,90,0.2); }
-        .pencarian-container input[type="text"] { width:260px; }
-        .pencarian-container input[type="number"] { width:100px; }
-        .btn-tambah { padding:10px 20px; border-radius:30px; font-weight:700; font-size:1em; background:var(--gold);
-            color:var(--dark); border:none; cursor:pointer; letter-spacing:0.5px; font-family:inherit; transition:0.3s; align-self:flex-end; }
-        .btn-tambah:hover { background:#d4b368; box-shadow:0 6px 20px rgba(197,163,90,0.5); transform:translateY(-2px); }
-        .keranjang-container { position:relative; z-index:1; }
-        .table-wrapper { overflow-x:auto; border-radius:16px; border:1px solid var(--border); background:rgba(30,20,20,0.7); margin-bottom:20px; }
-        table { width:100%; border-collapse:collapse; font-size:0.95em; min-width:600px; }
-        thead th { background:#3b2f2f; color:var(--gold); padding:14px 10px; text-align:center; font-weight:700;
-            letter-spacing:0.5px; border-bottom:2px solid var(--gold); position:sticky; top:0; z-index:2; }
-        tbody td { padding:10px 8px; text-align:center; border-bottom:1px solid rgba(139,125,107,0.25); color:var(--cream); }
-        tbody tr:hover { background:rgba(197,163,90,0.08); }
-        .item-name { text-align:left; padding-left:16px; }
-        .harga-input, .qty-input-keranjang { width:90px; padding:8px; text-align:center; background:#2a1a1a;
-            border:1px solid var(--border); color:var(--cream); border-radius:8px; font-weight:600; font-family:inherit; font-size:0.95em; transition:0.3s; }
-        .harga-input:focus, .qty-input-keranjang:focus { border-color:var(--gold); outline:none;
-            box-shadow:0 0 0 3px rgba(197,163,90,0.2); background:#1e1410; }
-        .subtotal-cell { font-weight:700; color:#fff; white-space:nowrap; }
-        .btn-hapus { background:none; border:none; color:#e74c3c; cursor:pointer; font-size:1.2em; transition:0.3s; }
-        .btn-hapus:hover { color:#ff6b6b; transform:scale(1.2); }
-        .total-section { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
-            padding:15px 20px; background:rgba(197,163,90,0.08); border-radius:12px; border:1px solid var(--border);
-            margin-bottom:15px; z-index:1; }
-        .total-section .label-total { font-size:1.3em; font-weight:700; color:var(--gold); letter-spacing:1px; }
-        .total-section .value-total { font-size:1.8em; font-weight:800; color:#fff; background:var(--dark);
-            padding:6px 20px; border-radius:10px; border:1px solid var(--gold); }
-        .rekap-section, .stok-section { background:rgba(30,20,20,0.8); border:1px solid var(--border);
-            border-radius:16px; padding:20px; margin-bottom:25px; z-index:1; }
-        .rekap-section h3, .stok-section h3 { color:var(--gold); margin-bottom:15px; font-size:1.2em;
-            letter-spacing:1px; text-align:center; text-transform:uppercase; }
-        .rekap-grid, .stok-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; }
-        .rekap-item, .stok-item { display:flex; justify-content:space-between; align-items:center;
-            background:rgba(42,26,26,0.7); padding:10px 14px; border-radius:10px;
-            border:1px solid rgba(197,163,90,0.2); transition:0.3s; }
-        .rekap-item:hover, .stok-item:hover { border-color:var(--gold); background:rgba(197,163,90,0.12); }
-        .rekap-nama, .stok-nama { font-weight:600; color:var(--cream); font-size:0.9em; }
-        .rekap-info, .stok-info { text-align:right; font-size:0.85em; }
-        .rekap-qty, .stok-qty { color:var(--gold); font-weight:700; }
-        .rekap-total, .stok-total { color:#fff; font-weight:700; }
-        .btn-group { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; z-index:1; }
-        .btn { padding:12px 22px; border-radius:30px; font-weight:700; font-size:0.95em; cursor:pointer;
-            letter-spacing:0.5px; border:none; transition:all 0.3s ease; font-family:inherit; display:flex; align-items:center; gap:7px; }
-        .btn-teks { background:var(--cream); color:var(--dark); }
-        .btn-teks:hover { background:#fff; box-shadow:0 6px 20px rgba(245,230,211,0.4); transform:translateY(-2px); }
-        .btn-gambar { background:var(--gold); color:var(--dark); }
-        .btn-gambar:hover { background:#d4b368; box-shadow:0 6px 20px rgba(197,163,90,0.5); transform:translateY(-2px); }
-        .btn-pdf { background:var(--dark); color:var(--gold); border:2px solid var(--gold); }
-        .btn-pdf:hover { background:#3b2f2f; box-shadow:0 6px 20px rgba(197,163,90,0.3); transform:translateY(-2px); }
-        .btn-reset { background:transparent; color:#aaa; border:1px solid #555; }
-        .btn-reset:hover { color:#fff; border-color:#fff; }
-        .btn:active { transform:scale(0.96); }
-        .notif-simpan { position:fixed; bottom:20px; right:20px; background:#2e7d32; color:white; padding:10px 20px;
-            border-radius:30px; font-weight:600; z-index:999; opacity:0; transform:translateY(20px); transition:0.3s ease; pointer-events:none; }
-        .notif-simpan.muncul { opacity:1; transform:translateY(0); }
-        .text-center { text-align:center; color:var(--gray); padding:15px; }
+        .main-container::before {
+            top: -40px;
+            right: -40px;
+            width: 150px;
+            height: 150px;
+            border: 2px solid rgba(197, 163, 90, 0.25);
+        }
+        .main-container::after {
+            bottom: -30px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(197, 163, 90, 0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        .header .logo-text {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+            font-family: 'Playfair Display', 'Yeseva One', 'Times New Roman', serif;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(197, 163, 90, 0.4);
+        }
+        .header .sub-logo {
+            font-size: 1em;
+            color: var(--cream);
+            letter-spacing: 1px;
+            margin-top: 2px;
+            font-style: italic;
+        }
+        .header .divider {
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 12px auto;
+            border-radius: 3px;
+        }
+        .date-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            z-index: 1;
+            position: relative;
+        }
+        .date-section label {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 1.05em;
+        }
+        .date-section input[type="date"] {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            background: var(--dark);
+            color: var(--cream);
+            font-size: 1em;
+            font-family: inherit;
+            outline: none;
+            transition: 0.3s;
+        }
+        .date-section input[type="date"]:focus {
+            box-shadow: 0 0 0 3px rgba(197, 163, 90, 0.3);
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            z-index: 1;
+            position: relative;
+        }
+        .filter-tab {
+            padding: 8px 18px;
+            border-radius: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--cream);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: 0.3s;
+            font-size: 0.9em;
+        }
+        .filter-tab.active {
+            background: var(--gold);
+            color: var(--dark);
+            border-color: var(--gold);
+        }
+        .filter-tab:hover {
+            border-color: var(--gold);
+            background: rgba(197, 163, 90, 0.15);
+        }
+        .pencarian-container {
+            background: rgba(30, 20, 20, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .pencarian-container .field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .pencarian-container label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        .pencarian-container input[type="text"],
+        .pencarian-container input[type="number"] {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--dark);
+            color: var(--cream);
+            font-family: inherit;
+            font-size: 1em;
+            outline: none;
+            transition: 0.3s;
+        }
+        .pencarian-container input[type="text"]:focus,
+        .pencarian-container input[type="number"]:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(197, 163, 90, 0.2);
+        }
+        .pencarian-container input[type="text"] {
+            width: 260px;
+        }
+        .pencarian-container input[type="number"] {
+            width: 100px;
+        }
+        .btn-tambah {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1em;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+            transition: 0.3s;
+            align-self: flex-end;
+        }
+        .btn-tambah:hover {
+            background: #d4b368;
+            box-shadow: 0 6px 20px rgba(197, 163, 90, 0.5);
+            transform: translateY(-2px);
+        }
+        .keranjang-container {
+            position: relative;
+            z-index: 1;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: rgba(30, 20, 20, 0.7);
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+            min-width: 600px;
+        }
+        thead th {
+            background: #3b2f2f;
+            color: var(--gold);
+            padding: 14px 10px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        tbody td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(139, 125, 107, 0.25);
+            color: var(--cream);
+        }
+        tbody tr:hover {
+            background: rgba(197, 163, 90, 0.08);
+        }
+        .item-name {
+            text-align: left;
+            padding-left: 16px;
+        }
+        .harga-input,
+        .qty-input-keranjang {
+            width: 90px;
+            padding: 8px;
+            text-align: center;
+            background: #2a1a1a;
+            border: 1px solid var(--border);
+            color: var(--cream);
+            border-radius: 8px;
+            font-weight: 600;
+            font-family: inherit;
+            font-size: 0.95em;
+            transition: 0.3s;
+        }
+        .harga-input:focus,
+        .qty-input-keranjang:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(197, 163, 90, 0.2);
+            background: #1e1410;
+        }
+        .subtotal-cell {
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+        }
+        .btn-hapus {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: 0.3s;
+        }
+        .btn-hapus:hover {
+            color: #ff6b6b;
+            transform: scale(1.2);
+        }
+        .total-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px 20px;
+            background: rgba(197, 163, 90, 0.08);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .total-section .label-total {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+        .total-section .value-total {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #fff;
+            background: var(--dark);
+            padding: 6px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+        }
+        .rekap-section {
+            background: rgba(30, 20, 20, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        .rekap-section h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .rekap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+        }
+        .rekap-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(42, 26, 26, 0.7);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(197, 163, 90, 0.2);
+            transition: 0.3s;
+            flex-wrap: wrap;
+        }
+        .rekap-item:hover {
+            border-color: var(--gold);
+            background: rgba(197, 163, 90, 0.12);
+        }
+        .rekap-nama {
+            font-weight: 600;
+            color: var(--cream);
+            font-size: 0.9em;
+            flex: 1 1 auto;
+        }
+        .rekap-info {
+            text-align: right;
+            font-size: 0.85em;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .rekap-stok {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .rekap-qty {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .rekap-total {
+            color: #fff;
+            font-weight: 700;
+        }
+        .stok-awal {
+            color: #aaa;
+            font-size: 0.8em;
+        }
+        .stok-sisa {
+            color: var(--success);
+            font-weight: 700;
+        }
+        .stok-habis {
+            color: var(--danger);
+            font-weight: 700;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 1;
+            position: relative;
+        }
+        .btn {
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            border: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .btn-stok {
+            background: rgba(197, 163, 90, 0.15);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            margin-bottom: 15px;
+        }
+        .btn-teks {
+            background: var(--cream);
+            color: var(--dark);
+        }
+        .btn-teks:hover {
+            background: #fff;
+            box-shadow: 0 6px 20px rgba(245, 230, 211, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-gambar {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .btn-gambar:hover {
+            background: #d4b368;
+            box-shadow: 0 6px 20px rgba(197, 163, 90, 0.5);
+            transform: translateY(-2px);
+        }
+        .btn-pdf {
+            background: var(--dark);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+        .btn-pdf:hover {
+            background: #3b2f2f;
+            box-shadow: 0 6px 20px rgba(197, 163, 90, 0.3);
+            transform: translateY(-2px);
+        }
+        .btn-reset {
+            background: transparent;
+            color: #aaa;
+            border: 1px solid #555;
+        }
+        .btn-reset:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .notif-simpan {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.3s ease;
+            pointer-events: none;
+        }
+        .notif-simpan.muncul {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .text-center {
+            text-align: center;
+            color: var(--gray);
+            padding: 15px;
+        }
         @media print {
-            body { background:white !important; padding:0 !important; }
-            .main-container { box-shadow:none !important; border:none !important; background:white !important; color:black !important; border-radius:0; padding:20px; }
-            .header .logo-text { color:#000 !important; text-shadow:none !important; }
-            .header .sub-logo { color:#333 !important; }
-            .header .divider { background:#000 !important; }
-            thead th { background:#eee !important; color:#000 !important; border-bottom:2px solid #000 !important; }
-            tbody td { color:#000 !important; border-bottom:1px solid #ccc !important; }
-            .harga-input, .qty-input-keranjang { border:1px solid #ccc !important; background:#fff !important; color:#000 !important; }
-            .subtotal-cell { color:#000 !important; }
-            .total-section, .rekap-section, .stok-section { background:#fafafa !important; border:1px solid #ccc !important; }
-            .total-section .label-total, .rekap-section h3, .stok-section h3 { color:#000 !important; }
-            .total-section .value-total { background:#fff !important; color:#000 !important; border:1px solid #000 !important; }
-            .rekap-item, .stok-item { background:#fff !important; border:1px solid #ccc !important; }
-            .rekap-nama, .stok-nama { color:#000 !important; }
-            .rekap-qty, .stok-qty, .rekap-total, .stok-total { color:#000 !important; }
-            .no-print { display:none !important; }
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+            .main-container {
+                box-shadow: none !important;
+                border: none !important;
+                background: white !important;
+                color: black !important;
+                border-radius: 0;
+                padding: 20px;
+            }
+            .header .logo-text {
+                color: #000 !important;
+                text-shadow: none !important;
+            }
+            .header .sub-logo {
+                color: #333 !important;
+            }
+            .header .divider {
+                background: #000 !important;
+            }
+            thead th {
+                background: #eee !important;
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+            }
+            tbody td {
+                color: #000 !important;
+                border-bottom: 1px solid #ccc !important;
+            }
+            .harga-input,
+            .qty-input-keranjang {
+                border: 1px solid #ccc !important;
+                background: #fff !important;
+                color: #000 !important;
+            }
+            .subtotal-cell {
+                color: #000 !important;
+            }
+            .total-section,
+            .rekap-section {
+                background: #fafafa !important;
+                border: 1px solid #ccc !important;
+            }
+            .total-section .label-total {
+                color: #000 !important;
+            }
+            .total-section .value-total {
+                background: #fff !important;
+                color: #000 !important;
+                border: 1px solid #000 !important;
+            }
+            .rekap-section h3 {
+                color: #000 !important;
+            }
+            .rekap-item {
+                background: #fff !important;
+                border: 1px solid #ccc !important;
+            }
+            .rekap-nama {
+                color: #000 !important;
+            }
+            .rekap-qty {
+                color: #000 !important;
+            }
+            .rekap-total {
+                color: #000 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -157,7 +592,6 @@
                 <label for="searchBarang">🔍 Cari Nama Barang</label>
                 <input type="text" id="searchBarang" list="barangList" placeholder="Ketik nama barang..." autocomplete="off">
                 <datalist id="barangList"></datalist>
-                <small id="stokInfo" style="color:var(--gold);"></small>
             </div>
             <div class="field">
                 <label for="jumlahBarang">🔢 Jumlah</label>
@@ -180,7 +614,7 @@
                         </tr>
                     </thead>
                     <tbody id="tbodyKeranjang">
-                        <tr id="emptyRow"><td colspan="6" class="text-center">Memuat data...</td></tr>
+                        <tr><td colspan="6" class="text-center">Memuat data...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -191,13 +625,13 @@
             </div>
 
             <div class="rekap-section" id="rekapSection">
-                <h3>📊 Rekap Penjualan Per Barang</h3>
-                <div class="rekap-grid" id="rekapGrid"><div class="text-center">Belum ada data</div></div>
-            </div>
-
-            <div class="stok-section" id="stokSection">
-                <h3>📦 Stok Barang Saat Ini</h3>
-                <div class="stok-grid" id="stokGrid"><div class="text-center">Memuat stok...</div></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin-bottom:0;">📊 Rekap Penjualan & Stok</h3>
+                    <button class="btn btn-stok no-print" onclick="toggleTampilSemuaStok()">📦 Semua Stok</button>
+                </div>
+                <div class="rekap-grid" id="rekapGrid" style="margin-top:15px;">
+                    <div class="text-center">Belum ada data</div>
+                </div>
             </div>
         </div>
 
@@ -212,39 +646,110 @@
     <div class="notif-simpan" id="notifSimpan">✅ Data tersimpan</div>
 
     <script>
+        // ================= KONFIGURASI =================
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBNNryUGT60HtXo79o6Nyinj06cAQC4nyDiYPs00pb-wmyhPgHdfsPHsumQKlCI0x8/exec';
 
+        // ================= DATA BARANG (ditambah item stok) =================
         const daftarBarang = [
             { nama: 'Baju Koko Warna', harga: 150000 },
-            { nama: 'Koko Putih', harga: 155000 },
+            { nama: 'Baju Koko Putih', harga: 155000 },
+            { nama: 'Gamis Panjang', harga: 235000 },
             { nama: 'Gamis Putih', harga: 235000 },
             { nama: 'Gamis Warna', harga: 235000 },
-            { nama: 'Kupiah Ameen', harga: 235000 },
+            { nama: 'Atlas BHS Supreme 925', harga: 195000 },
+            { nama: 'Sarung Gayah Duduk Asia Kembang', harga: 80000 },
+            { nama: 'Sarung Mangga', harga: 80000 },
+            { nama: 'Sarung Wadimor', harga: 75000 },
+            { nama: 'Sarung Atlas Idaman Silver', harga: 75000 },
+            { nama: 'Surban Solo', harga: 65000 },
+            { nama: 'Surban Aushieda Print', harga: 100000 },
+            { nama: 'Surban Terang Bulan (Tipis)', harga: 40000 },
+            { nama: 'Kupiah Malaysia Ori Ameen', harga: 235000 },
+            { nama: 'Kupiah Malaysia Biasa', harga: 35000 },
+            { nama: 'Kupiah Malaysia Hitam', harga: 35000 },
+            { nama: 'Kupiah Tipis Motof', harga: 30000 },
+            { nama: 'Pulpen Biasa', harga: 3000 },
+            { nama: 'Pulpen Tinta', harga: 4000 },
+            { nama: 'Pulpen Madina', harga: 30000 },
+            { nama: 'Buku Tulis', harga: 0 },
+            { nama: 'Buku Paperline', harga: 0 },
+            { nama: 'Spidol', harga: 0 },
+            { nama: 'Pengisi Spidol', harga: 0 },
+            { nama: 'Sendal', harga: 40000 },
+            { nama: 'Lem Alteko', harga: 0 },
+            { nama: 'Plester Besar', harga: 0 },
+            { nama: 'Plester Kecil', harga: 0 },
+            { nama: 'Jasa Bordir Komputer', harga: 0 },
+            { nama: 'Jasa Jahit & Vermak', harga: 0 },
+            // Barang baru sesuai stok
             { nama: 'Celana Training', harga: 0 },
             { nama: 'Celana Putih', harga: 0 },
             { nama: 'Celana Warna Tebal', harga: 0 },
             { nama: 'Celana Warna Tipis', harga: 0 },
             { nama: 'Celana Hitam Tipis', harga: 0 },
-            { nama: 'Kupiah Putih + Hitam Standar', harga: 35000 },
+            { nama: 'Kupiah Putih+Hitam Standar', harga: 35000 },
             { nama: 'Kupiah Warna Tipis', harga: 30000 },
-            { nama: 'Kupiah', harga: 35000 },
-            { nama: 'Tapih Goyor', harga: 80000 },
-            { nama: 'Tapih BHS Atlas', harga: 80000 },
-            { nama: 'Gajah Duduk', harga: 80000 },
-            { nama: 'Wadimor', harga: 75000 },
-            { nama: 'Mangga', harga: 80000 },
-            { nama: 'Atlas Idaman', harga: 75000 },
-            { nama: 'Surban Tipis Putih Almas', harga: 65000 },
-            { nama: 'Surban Alshafeda', harga: 100000 },
-            { nama: 'Surban Solo / Dingin', harga: 65000 },
-            { nama: 'Terang Bulan', harga: 40000 },
+            { nama: 'Kupiah', harga: 0 },
+            { nama: 'Tapih Goyor', harga: 0 },
+            { nama: 'Gajah Duduk', harga: 0 },
+            { nama: 'Surban Tipis Putih Almas', harga: 0 },
+            { nama: 'Surban Alshafeda', harga: 0 },
         ];
 
+        // ================= STOK AWAL (hardcode dari data) =================
+        const stokAwal = {
+            'Baju Koko Warna': 24,
+            'Baju Koko Putih': 20,
+            'Gamis Putih': 10,
+            'Gamis Warna': 13,
+            'Kupiah Malaysia Ori Ameen': 20,
+            'Celana Training': 20,
+            'Celana Putih': 30,
+            'Celana Warna Tebal': 20,
+            'Celana Warna Tipis': 20,
+            'Celana Hitam Tipis': 20,
+            'Kupiah Putih+Hitam Standar': 50,
+            'Kupiah Warna Tipis': 10,
+            'Kupiah': 10,
+            'Tapih Goyor': 40,
+            'Atlas BHS Supreme 925': 20, // TAPIH BHS ATLAS
+            'Gajah Duduk': 10,
+            'Sarung Wadimor': 5,
+            'Sarung Mangga': 5,
+            'Sarung Atlas Idaman Silver': 10,
+            'Surban Tipis Putih Almas': 10,
+            'Surban Alshafeda': 10,
+            'Surban Solo': 10,
+            'Surban Terang Bulan (Tipis)': 20,
+            // Tambahan default jika tidak ada di data stok
+            'Sarung Gayah Duduk Asia Kembang': 0,
+            'Surban Aushieda Print': 0,
+            'Kupiah Malaysia Biasa': 0,
+            'Kupiah Malaysia Hitam': 0,
+            'Kupiah Tipis Motof': 0,
+            'Pulpen Biasa': 9999,
+            'Pulpen Tinta': 9999,
+            'Pulpen Madina': 9999,
+            'Buku Tulis': 9999,
+            'Buku Paperline': 9999,
+            'Spidol': 9999,
+            'Pengisi Spidol': 9999,
+            'Sendal': 9999,
+            'Lem Alteko': 9999,
+            'Plester Besar': 9999,
+            'Plester Kecil': 9999,
+            'Jasa Bordir Komputer': 9999,
+            'Jasa Jahit & Vermak': 9999,
+            'Gamis Panjang': 0,
+            'Gamis Putih': 10,
+            'Gamis Warna': 13,
+        };
+
         let semuaData = [];
-        let stokBarang = {};
         let idCounter = 1;
         let filterAktif = 'tanggal';
         let keranjang = [];
+        let tampilSemuaStok = false;
 
         const tglInput = document.getElementById('tanggalInput');
         tglInput.value = new Date().toISOString().split('T')[0];
@@ -260,6 +765,7 @@
         }
         renderDatalist();
 
+        // Filter tabs
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -289,59 +795,67 @@
             }));
             idCounter = keranjang.length > 0 ? Math.max(...keranjang.map(it => it.id)) + 1 : 1;
             renderKeranjang();
-            renderRekap();
-            renderStokGrid();
+            renderStok();
         }
 
+        // ================= KOMUNIKASI GOOGLE SHEETS =================
         async function fetchData() {
             try {
-                const res = await fetch(APPS_SCRIPT_URL);
-                const json = await res.json();
-                semuaData = json.penjualan.map(item => ({
+                const response = await fetch(APPS_SCRIPT_URL);
+                const data = await response.json();
+                semuaData = data.map(item => ({
                     id: Number(item.id),
                     nama: item.nama,
                     harga: Number(item.harga),
                     jumlah: Number(item.jumlah),
                     tanggal: item.tanggal || '',
                 }));
-                stokBarang = json.stok || {};
                 renderDataDifilter();
-            } catch (e) {
-                document.getElementById('emptyRow').innerHTML =
-                    '<td colspan="6" class="text-center" style="color:#e74c3c;">❌ Gagal menghubungi server.</td>';
+            } catch (err) {
+                document.getElementById('tbodyKeranjang').innerHTML =
+                    '<tr><td colspan="6" style="text-align:center; padding:30px; color:#e74c3c;">❌ Gagal menghubungi server. Periksa URL Apps Script.</td></tr>';
             }
         }
 
         async function simpanKeSheet(action, params) {
-            const fd = new FormData();
-            fd.append('action', action);
-            for (const k in params) fd.append(k, params[k]);
+            const formData = new FormData();
+            formData.append('action', action);
+            for (const key in params) formData.append(key, params[key]);
             try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: fd });
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: formData });
                 notifSimpan('✅ Data tersimpan');
-            } catch (e) {
+            } catch (err) {
                 alert('Gagal menyimpan ke server.');
             }
         }
 
         function notifSimpan(teks) {
-            const n = document.getElementById('notifSimpan');
-            n.textContent = teks;
-            n.classList.add('muncul');
-            clearTimeout(n._timeout);
-            n._timeout = setTimeout(() => n.classList.remove('muncul'), 1500);
+            const notif = document.getElementById('notifSimpan');
+            notif.textContent = teks;
+            notif.classList.add('muncul');
+            clearTimeout(notif._timeout);
+            notif._timeout = setTimeout(() => notif.classList.remove('muncul'), 1500);
+        }
+
+        // ================= OPERASI KERANJANG =================
+        function getStokTersisa(namaBarang) {
+            const awal = stokAwal[namaBarang] || 0;
+            const totalTerjual = semuaData
+                .filter(item => item.nama === namaBarang)
+                .reduce((sum, item) => sum + item.jumlah, 0);
+            return Math.max(0, awal - totalTerjual);
         }
 
         function tambahBarang() {
             const nama = document.getElementById('searchBarang').value.trim();
             const jumlah = parseInt(document.getElementById('jumlahBarang').value) || 1;
-            if (!nama) return alert('⚠️ Pilih barang.');
+            if (!nama) return alert('⚠️ Silakan ketik atau pilih nama barang.');
             if (jumlah < 1) return alert('⚠️ Jumlah minimal 1.');
 
-            // Cek stok
-            const stokTersedia = stokBarang[nama] !== undefined ? stokBarang[nama] : 999;
-            if (jumlah > stokTersedia) {
-                return alert(`⚠️ Stok tidak mencukupi! Stok ${nama}: ${stokTersedia}`);
+            const stokCukup = getStokTersisa(nama);
+            if (jumlah > stokCukup) {
+                alert(`⚠️ Stok tidak cukup! Stok tersisa: ${stokCukup} pcs.`);
+                return;
             }
 
             let hargaDefault = 0;
@@ -351,8 +865,6 @@
             const idBaru = idCounter++;
             const itemBaru = { id: idBaru, nama, harga: hargaDefault, jumlah, tanggal: tglInput.value };
             semuaData.push(itemBaru);
-            // Kurangi stok lokal dulu (optimistis)
-            if (stokBarang[nama] !== undefined) stokBarang[nama] -= jumlah;
             simpanKeSheet('tambah', { id: idBaru, nama, harga: hargaDefault, jumlah, tanggal: tglInput.value });
 
             document.getElementById('searchBarang').value = '';
@@ -361,18 +873,14 @@
         }
 
         function hapusItem(id) {
-            const item = semuaData.find(i => Number(i.id) === id);
-            if (item && stokBarang[item.nama] !== undefined) {
-                stokBarang[item.nama] += item.jumlah;
-            }
-            semuaData = semuaData.filter(i => Number(i.id) !== id);
+            semuaData = semuaData.filter(item => Number(item.id) !== id);
             simpanKeSheet('hapus', { id });
             renderDataDifilter();
         }
 
         function updateHarga(input) {
             const id = parseInt(input.getAttribute('data-id'));
-            const item = semuaData.find(i => Number(i.id) === id);
+            const item = semuaData.find(it => Number(it.id) === id);
             if (item) {
                 item.harga = parseInt(input.value) || 0;
                 simpanKeSheet('update', { id, harga: item.harga, jumlah: item.jumlah });
@@ -382,10 +890,17 @@
 
         function updateJumlah(input) {
             const id = parseInt(input.getAttribute('data-id'));
-            const item = semuaData.find(i => Number(i.id) === id);
+            const item = semuaData.find(it => Number(it.id) === id);
             if (item) {
-                item.jumlah = parseInt(input.value) || 1;
-                simpanKeSheet('update', { id, harga: item.harga, jumlah: item.jumlah });
+                const newJumlah = parseInt(input.value) || 1;
+                const stokSekarang = getStokTersisa(item.nama) + item.jumlah; // kembalikan stok sebelum pengurangan
+                if (newJumlah > stokSekarang) {
+                    alert(`⚠️ Jumlah melebihi stok! Stok tersedia: ${stokSekarang} (termasuk jumlah sebelumnya).`);
+                    input.value = item.jumlah;
+                    return;
+                }
+                item.jumlah = newJumlah;
+                simpanKeSheet('update', { id, harga: item.harga, jumlah: newJumlah });
             }
             renderDataDifilter();
         }
@@ -393,106 +908,142 @@
         function renderKeranjang() {
             const tbody = document.getElementById('tbodyKeranjang');
             if (keranjang.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Belum ada barang.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Belum ada barang ditambahkan untuk filter ini.</td></tr>';
                 document.getElementById('totalPendapatan').textContent = 'Rp 0';
                 return;
             }
             let html = '';
             keranjang.forEach((item, i) => {
                 const sub = item.harga * item.jumlah;
-                html += `<tr data-id="${item.id}"><td>${i+1}</td><td class="item-name">${item.nama}</td>
-                <td><input type="number" class="harga-input" value="${item.harga}" min="0" data-id="${item.id}" onchange="updateHarga(this)"></td>
-                <td><input type="number" class="qty-input-keranjang" value="${item.jumlah}" min="1" data-id="${item.id}" onchange="updateJumlah(this)"></td>
-                <td class="subtotal-cell">Rp ${sub.toLocaleString('id-ID')}</td>
-                <td><button class="btn-hapus" onclick="hapusItem(${item.id})">🗑️</button></td></tr>`;
+                html += `<tr data-id="${item.id}">
+                    <td>${i + 1}</td><td class="item-name">${item.nama}</td>
+                    <td><input type="number" class="harga-input" value="${item.harga}" min="0" data-id="${item.id}" onchange="updateHarga(this)"></td>
+                    <td><input type="number" class="qty-input-keranjang" value="${item.jumlah}" min="1" data-id="${item.id}" onchange="updateJumlah(this)"></td>
+                    <td class="subtotal-cell">Rp ${sub.toLocaleString('id-ID')}</td>
+                    <td><button class="btn-hapus" onclick="hapusItem(${item.id})">🗑️</button></td>
+                </tr>`;
             });
             tbody.innerHTML = html;
             const total = keranjang.reduce((s, it) => s + (it.harga * it.jumlah), 0);
             document.getElementById('totalPendapatan').textContent = 'Rp ' + total.toLocaleString('id-ID');
         }
 
-        function renderRekap() {
+        function renderStok() {
             const grid = document.getElementById('rekapGrid');
-            const map = {};
-            getDataDifilter().forEach(item => {
-                if (!map[item.nama]) map[item.nama] = { qty: 0, total: 0 };
-                map[item.nama].qty += item.jumlah;
-                map[item.nama].total += item.harga * item.jumlah;
+            const rekapMap = {};
+            const dataTampil = getDataDifilter();
+
+            // Hitung penjualan hari ini (untuk rekap harian)
+            dataTampil.forEach(item => {
+                if (!rekapMap[item.nama]) rekapMap[item.nama] = { terjual: 0, total: 0 };
+                rekapMap[item.nama].terjual += item.jumlah;
+                rekapMap[item.nama].total += item.harga * item.jumlah;
             });
-            const entries = Object.entries(map).sort((a, b) => b[1].total - a[1].total);
-            if (entries.length === 0) {
-                grid.innerHTML = '<div class="text-center">Belum ada data</div>';
+
+            // Daftar barang yang ingin ditampilkan: jika filter 'tanggal' dan tampilSemuaStok true, tampilkan semua stok; jika tidak, hanya yang ada penjualan
+            const semuaNamaBarang = Object.keys(stokAwal);
+            let daftarTampil = [];
+            if (filterAktif === 'semua' || tampilSemuaStok) {
+                daftarTampil = semuaNamaBarang;
+            } else {
+                daftarTampil = Object.keys(rekapMap);
+            }
+
+            if (daftarTampil.length === 0) {
+                grid.innerHTML = '<div class="text-center">Belum ada data penjualan</div>';
                 return;
             }
-            grid.innerHTML = entries.map(([nama, info]) =>
-                `<div class="rekap-item"><span class="rekap-nama">${nama}</span><span class="rekap-info"><span class="rekap-qty">${info.qty} pcs</span> | <span class="rekap-total">Rp ${info.total.toLocaleString('id-ID')}</span></span></div>`
-            ).join('');
+
+            // Urutkan: yang ada penjualan di atas
+            daftarTampil.sort((a, b) => {
+                const aTerjual = rekapMap[a]?.terjual || 0;
+                const bTerjual = rekapMap[b]?.terjual || 0;
+                return bTerjual - aTerjual;
+            });
+
+            let html = '';
+            daftarTampil.forEach(nama => {
+                const awal = stokAwal[nama] || 0;
+                const totalTerjualSemua = semuaData
+                    .filter(item => item.nama === nama)
+                    .reduce((sum, item) => sum + item.jumlah, 0);
+                const sisa = Math.max(0, awal - totalTerjualSemua);
+                const terjualHariIni = rekapMap[nama]?.terjual || 0;
+                const totalHariIni = rekapMap[nama]?.total || 0;
+                const stokClass = sisa === 0 ? 'stok-habis' : 'stok-sisa';
+
+                html += `<div class="rekap-item">
+                    <span class="rekap-nama">${nama}</span>
+                    <div class="rekap-info">
+                        <div class="rekap-stok">
+                            <span class="stok-awal">Awal: ${awal}</span> &nbsp;
+                            <span class="rekap-qty">Terjual: ${terjualHariIni} pcs</span> &nbsp;
+                            <span class="${stokClass}">Sisa: ${sisa}</span>
+                        </div>
+                        ${terjualHariIni > 0 ? `<div class="rekap-total">Rp ${totalHariIni.toLocaleString('id-ID')}</div>` : ''}
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html;
         }
 
-        function renderStokGrid() {
-            const grid = document.getElementById('stokGrid');
-            const entries = Object.entries(stokBarang);
-            if (entries.length === 0) {
-                grid.innerHTML = '<div class="text-center">Data stok kosong</div>';
-                return;
-            }
-            // Urut abjad
-            entries.sort((a, b) => a[0].localeCompare(b[0]));
-            grid.innerHTML = entries.map(([nama, qty]) =>
-                `<div class="stok-item"><span class="stok-nama">${nama}</span><span class="stok-info"><span class="stok-qty">${qty} pcs</span></span></div>`
-            ).join('');
+        function toggleTampilSemuaStok() {
+            tampilSemuaStok = !tampilSemuaStok;
+            const btn = document.querySelector('.btn-stok');
+            btn.textContent = tampilSemuaStok ? '📦 Sembunyikan Stok' : '📦 Semua Stok';
+            renderStok();
         }
 
         async function resetKeranjang() {
             if (!keranjang.length) return;
-            if (confirm('Hapus semua data yang difilter?')) {
-                const ids = getDataDifilter().map(i => i.id);
-                semuaData = semuaData.filter(i => !ids.includes(Number(i.id)));
+            if (confirm('Hapus semua data yang sedang difilter?')) {
+                const ids = getDataDifilter().map(it => it.id);
+                semuaData = semuaData.filter(it => !ids.includes(Number(it.id)));
                 await simpanKeSheet('reset', {});
                 renderDataDifilter();
             }
         }
 
+        // ================= EKSPOR =================
         function getTanggalISO() { return tglInput.value; }
 
         function eksporTeks() {
             const data = getDataDifilter();
-            if (!data.length) return alert('Tidak ada data.');
-            let teks = 'GALERI AR-RIJAL\nLaporan Penjualan\n';
-            teks += 'Tanggal: ' + (filterAktif==='tanggal' ? getTanggalISO() : 'Semua') + '\n';
-            data.forEach((it, i) => teks += `${i+1}. ${it.nama} | ${it.harga} | ${it.jumlah} | ${it.harga*it.jumlah}\n`);
-            downloadFile(teks, 'penjualan.txt', 'text/plain');
+            if (!data.length) return alert('⚠️ Tidak ada data.');
+            let teks = '══════════════════\n  GALERI AR-RIJAL DAR\'EL\n  Laporan Penjualan\n══════════════════\n';
+            teks += 'Tanggal : ' + (filterAktif === 'tanggal' ? tglInput.value : 'Semua') + '\n';
+            teks += '──────────────────\nNO | NAMA BARANG | HARGA | QTY | SUBTOTAL\n';
+            data.forEach((it, i) => teks += `${i+1}. ${it.nama} | Rp ${it.harga} | ${it.jumlah} | Rp ${it.harga*it.jumlah}\n`);
+            teks += '──────────────────\nTOTAL : Rp ' + data.reduce((s, i) => s + i.harga * i.jumlah, 0) + '\n';
+            downloadFile(teks, 'penjualan-' + getTanggalISO() + '.txt', 'text/plain');
         }
 
         function eksporGambar() {
-            if (!getDataDifilter().length) return alert('Tidak ada data.');
-            html2canvas(document.getElementById('exportArea'), { backgroundColor:'#1a0f0f', scale:2, ignoreElements:el=>el.classList.contains('no-print') })
-            .then(c => {
+            if (!getDataDifilter().length) return alert('⚠️ Tidak ada data.');
+            html2canvas(document.getElementById('exportArea'), {
+                backgroundColor: '#1a0f0f',
+                scale: 2,
+                ignoreElements: el => el.classList.contains('no-print')
+            }).then(c => {
                 const a = document.createElement('a');
-                a.download = 'penjualan.png'; a.href = c.toDataURL(); a.click();
+                a.download = 'penjualan-' + getTanggalISO() + '.png';
+                a.href = c.toDataURL('image/png');
+                a.click();
             });
         }
 
         function eksporPDF() {
-            if (!getDataDifilter().length) return alert('Tidak ada data.');
+            if (!getDataDifilter().length) return alert('⚠️ Tidak ada data.');
             window.print();
         }
 
         function downloadFile(c, f, m) {
-            const b = new Blob([c], {type:m}); const a = document.createElement('a');
-            a.href = URL.createObjectURL(b); a.download = f; a.click();
+            const b = new Blob([c], { type: m });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(b);
+            a.download = f;
+            a.click();
         }
-
-        // Tampilkan info stok saat user mengetik
-        document.getElementById('searchBarang').addEventListener('input', function() {
-            const nama = this.value.trim();
-            const info = document.getElementById('stokInfo');
-            if (stokBarang[nama] !== undefined) {
-                info.textContent = `Stok: ${stokBarang[nama]}`;
-            } else {
-                info.textContent = '';
-            }
-        });
 
         fetchData();
     </script>
